@@ -1,0 +1,23 @@
+{% extends 'layout/base.html' %}
+
+{% block title %} News {% endblock %}
+
+{% block content %}
+    {% if category %}
+        <div class="subscribe">
+            <em>
+                Subscribe to
+                <strong>{{ category.name }}</strong>
+            </em>
+
+            <a href="{% url 'news:subscribe' category.id %}">Subscribe</a>
+        </div>
+    {% endif %}
+
+    <h1>Posts in {{ category.name }}</h1>
+    <ul>
+        {% for post in category_posts %}
+            <li><a href="{% url 'news:post_detail' post.id %}">{{ post.title }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

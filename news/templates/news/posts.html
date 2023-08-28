@@ -1,0 +1,76 @@
+{% extends 'layout/base.html' %}
+{% load custom_filters %}
+
+{% block title %}
+    Posts
+{% endblock title %}
+
+{% block content %}
+    <h1>Все посты</h1>
+    <h4>Количество постов {{ filter.qs|length }}</h4>
+    <hr>
+    {% if posts %}
+
+        <form method="GET">
+            {{ filter.form }}
+            <input class="btn btn-primary" type="submit" value="Найти">
+        </form>
+
+        <table>
+            <tr>
+                <td>
+                    Заголовок
+                </td>
+                <td>
+                    Дата публикации
+                </td>
+                <td>
+                    Текст
+                </td>
+                <td scope="col">
+                    Действия
+                </td>
+            </tr>
+        {% for post in filter.qs %}
+            <tr>
+                <td>
+                    <a href="{% url 'news:post_detail' post.id %}">{{ post.title|censor_text }}</a>
+                </td>
+                <td>
+                    {{ post.dateCreation|date:'d M Y' }}
+                </td>
+                <td>
+                    {{ post.text|truncatechars:50|censor_text }}
+                </td>
+                <td>
+                   <a href="{% url 'news:post_update' post.id %}">
+                       Update
+                   </a>
+                   <a href="{% url 'news:post_delete' post.id %}">
+                       Delete
+                   </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+
+        {% include 'news/parts/paginator.html' %}
+
+    {% else %}
+        <h2>Постов нет</h2>
+    {% endif %}
+
+    <a style="display: block" class="btn btn-primary" href="logout/">Выйти</a>
+
+    {% if is_not_author %}
+
+        <a class="btn btn-info" href="{% url 'news:upgrade' %}">
+         Хочу стать Автором!
+        </a>
+        {% else %}
+        <h3>
+         Вы Автор!
+        </h3>
+    {% endif %}
+
+{% endblock content %}

@@ -1,0 +1,21 @@
+
+{% extends 'layout/base.html' %}
+{% load custom_filters %}
+
+{% block title %}
+    Post
+{% endblock title %}
+
+{% block content %}
+    <h1>{{ post.title|censor_text }}</h1>
+    <h4>{{ post.dateCreation|date:'d M Y' }}</h4>
+    <hr>
+    <p>{{ post.text|censor_text }}</p>
+    <p>{{ post.author.authorUser }}</p>
+    <p>
+        Category:
+         {% for category in post.postCategory.all %}
+            <li><a href="{% url 'news:category'  category.id%}">{{ category.name }}</a></li>
+         {% endfor %}
+    </p>
+{% endblock content %}
